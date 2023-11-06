@@ -1,0 +1,4 @@
+contracts/lib/
+circuits/data/
+
+*.vk
