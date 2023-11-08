@@ -1,0 +1,22 @@
+query GetVaultData($vaultId: String!, $blockNumber: Int!) {
+  vaults(
+    orderBy: debt
+    orderDirection: desc
+    where: {id:  $vaultId}
+    block: {number: $blockNumber}
+  ) {
+    debt
+    id
+    collateral
+    collateralType {
+      totalDebt
+      totalCollateral
+      debtNormalized
+      price {
+        value
+      }
+      id
+    }
+  }
+}
+
