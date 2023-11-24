@@ -7,3 +7,4 @@ pub mod is_zero;
 pub mod maker_queries;
 pub mod or;
 pub mod standard_plonk;
+pub mod weiner;
