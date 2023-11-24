@@ -1,9 +1,7 @@
-use axiom_eth::{
-    batch_query::response::native::FullStorageQuery, providers::get_full_storage_queries,
-};
+use axiom_eth::{batch_query::response::native::FullStorageQuery, providers::get_full_storage_queries};
 use ethers_core::{
-    types::{Address, BlockId, H256, U256},
-    utils::{hex, keccak256},
+    types::{Address, H256},
+    utils::{keccak256, hex},
 };
 use ethers_providers::{Http, Provider, RetryClient};
 

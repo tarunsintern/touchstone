@@ -1,8 +1,8 @@
 use clap::Parser;
 use axiom_eth::{keccak::KeccakChip, EthChip, Field};
 use halo2_base::{AssignedValue, Context, gates::GateChip};
-use halo2_base::utils::{ScalarField, BigPrimeField, fe_to_biguint};
-use halo2_scaffold::circuits::weiner::WeinerProcessChip;
+use halo2_base::utils::{BigPrimeField, fe_to_biguint};
+use halo2_scaffold::circuits::wiener::WienerProcessChip;
 use zk_fixed_point_chip::gadget::fixed_point::{FixedPointChip, FixedPointInstructions};
 use halo2_scaffold::scaffold::cmd::Cli;
 use halo2_scaffold::scaffold::run;
@@ -20,24 +20,24 @@ fn compute_expected_shortfall<F: Field>(
 ) where F: BigPrimeField {
 
     // fixed-point exp arithmetic
-    let fixed_point_chip = FixedPointChip::<F, 32>::default(32);
+    let fixed_point_chip = FixedPointChip::<F, 63>::default(63);
 
     // weiner process
     
 
     let seed: F = F::from_str_vartime(&input.x).expect("deserialize field element should not fail");
     let seed = ctx.load_witness(seed);
-    let weiner_chip = WeinerProcessChip::<F>::new(fixed_point_chip, seed, 32);
-    let hash = weiner_chip.gen_weiner(ctx, 1);
+    let wiener_chip = WienerProcessChip::<F>::new(fixed_point_chip, seed, 63);
+    // let hash = wiener_chip.gen_wiener(ctx, 1);
 
-    let hash_value = fe_to_biguint(hash.value());
-    println!("hash: {:?}", hash_value);
+    // let hash_value = fe_to_biguint(hash.value());
+    // println!("hash: {:?}", hash_value);
 
-    let flt = 124.12;
-    let quant = weiner_chip.fp_chip.quantization(flt);
-
-    let deq = weiner_chip.fp_chip.dequantization(quant);
-    println!("deq: {:?}", deq);
+    let hash2 = wiener_chip.mock_gen_wiener(ctx, 10);
+    for h in hash2 {
+        let hash_value = wiener_chip.fp_chip.dequantization(*h.value());
+        println!("hash2: {:?}", hash_value);
+    }
 } 
 
 fn main() {
